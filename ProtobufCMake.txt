@@ -1,0 +1,12 @@
+file(GLOB proto_files "${CMAKE_CURRENT_SOURCE_DIR}/*.proto")
+foreach(proto_file ${proto_files})
+  string(REGEX REPLACE "[^/]proto" "" proto_file_name ${proto_file})
+  list(APPEND PROTO_SRCS "${proto_file_name}.pb.cc")
+    add_custom_command(
+      OUTPUT "${proto_file_name}.pb.h" "${proto_file_name}.pb.cc"
+      COMMAND protoc --proto_path=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/ ${proto_file}
+      DEPENDS ${proto_file}
+    )
+endforeach(proto_file)
+
+message(STATUS ${PROTO_SRCS})
